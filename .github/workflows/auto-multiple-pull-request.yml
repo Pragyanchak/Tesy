@@ -28,6 +28,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Setup Git
+      run: |
+        git config --global user.email "hujanfoom@gmail.com"
+        git config --global user.name "Pragyanchak"
+
     - name: Hitung dan Buat Pull Request
       run: |
         pr_count="${{ github.event.inputs.pr_count }}"
