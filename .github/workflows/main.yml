@@ -9,13 +9,7 @@ jobs:
     - name: Repeat Backfill
       uses: bcanseco/github-contribution-graph-action@v2
       with:
-        run_times: 2 # Tentukan berapa kali kamu ingin mengulangi proses backfill
+        args: "--min 5 --max 10 --start-date 01-01-2025 --end-date 12-31-2025"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GIT_EMAIL: hujanfoom@gmail.com # replace me
-        MAX_DAYS: 365
-        MIN_COMMITS_PER_DAY: 5
-        MAX_COMMITS_PER_DAY: 10
-        YEAR: 2025 # Ganti dengan tahun yang diinginkan
-        START_DATE: 01-01-${{ env.YEAR }} # Format tanggal MM-DD-YYYY
-        END_DATE: 12-31-${{ env.YEAR }} # Format tanggal akhir MM-DD-YYYY
+        GIT_EMAIL: hujanfoom@gmail.com # replace with your email
