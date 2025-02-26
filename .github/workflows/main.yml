@@ -17,23 +17,25 @@ jobs:
     - name: Create commits
       run: |
         start_date="2025-01-01"
-        end_date="2025-09-31"
+        end_date="2025-12-31"
 
         while [ "$start_date" != "$end_date" ]; do
+          echo "Processing date $start_date"
+          
           # Generate a random number of commits for each day
           commits_today=$(( (RANDOM % 6) + 5 )) # between 5 and 10 commits
           
           for i in $(seq 1 $commits_today); do
             echo "Commit on $start_date $i" >> file.txt
             git add file.txt
-            GIT_COMMITTER_DATE="$start_date 12:00:00" git commit --date="$start_date 12:00:00" -m "Commit on $start_date"
+            GIT_COMMITTER_DATE="$start_date 12:00:00" git commit --date="$start_date 12:00:00" -m "Commit on $start_date $i"
           done
           
           # Move to the next day
-          start_date=$(date -I -d "$start_date + 1 day")
-        done
+          start_date=$(date -d "$start_date + 1 day" +%Y-%m-%d)
 
-        # Push all commits
-        git push origin main
+          # Push the commits after completing all commits for the day
+          git push origin main || echo "Failed to push"
+        done
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
