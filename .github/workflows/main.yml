@@ -6,10 +6,34 @@ jobs:
     permissions:
       contents: write
     steps:
-    - name: Repeat Backfill
-      uses: bcanseco/github-contribution-graph-action@v2
-      with:
-        args: "--min 5 --max 10 --start-date 01-01-2025 --end-date 12-31-2025"
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up git config
+      run: |
+        git config --global user.name "Pragyanchak"
+        git config --global user.email "hujanfoom@gmail.com"
+
+    - name: Create commits
+      run: |
+        start_date="2025-01-01"
+        end_date="2025-12-31"
+
+        while [ "$start_date" != "$end_date" ]; do
+          # Generate a random number of commits for each day
+          commits_today=$(( (RANDOM % 6) + 5 )) # between 5 and 10 commits
+          
+          for i in $(seq 1 $commits_today); do
+            echo "Commit on $start_date $i" >> file.txt
+            git add file.txt
+            GIT_COMMITTER_DATE="$start_date 12:00:00" git commit --date="$start_date 12:00:00" -m "Commit on $start_date"
+          done
+          
+          # Move to the next day
+          start_date=$(date -I -d "$start_date + 1 day")
+        done
+
+        # Push all commits
+        git push origin main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GIT_EMAIL: hujanfoom@gmail.com # replace with your email
